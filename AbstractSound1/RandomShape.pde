@@ -14,6 +14,8 @@ class RandomShape {
   long timeToNextUpdate = 0;
   float padding = 200;
   float lowerPadding = 250;
+  float opacity=255;
+  float opacityAdjustRate = 3;
 
   void randomize() {
     x = random(padding, width-padding);
@@ -24,9 +26,14 @@ class RandomShape {
       ys[i] = random(-(width/4), (width/4));
     }
   }
+  
+  void randomize(float opacity) {
+    this.opacity = opacity;
+    randomize();
+  }
 
   void drawPoly() {
-    fill(c);
+    fill(c,opacity);
     pushMatrix();
     translate(x, y);
     beginShape();
@@ -35,5 +42,11 @@ class RandomShape {
     }
     endShape(CLOSE);
     popMatrix();
+    if (opacity < 255) {
+      opacity = opacity + opacityAdjustRate;
+      if (opacity > 255) {
+        opacity = 255;
+      }
+    }
   }
 }

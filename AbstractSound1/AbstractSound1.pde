@@ -1,5 +1,5 @@
 /*
-Abstract Sound I 
+Abstract Sound I
  Donya Quick
  */
 
@@ -15,6 +15,12 @@ int numShapes = 5;
 ArrayList<RandomShape> shapes = new ArrayList<RandomShape>();
 int numFiles = 10;
 AudioPlayer[] players;
+float slow = 0;
+float med = 150;
+float fast = 253;
+float[] opacities = new float[]{fast, fast, slow, med, med, slow, med, slow, slow, med};
+float currOpacity = 0;
+boolean allowFade = true;
 
 long tMin = 2000; // minimum time to update
 long tMax = 8000; // maximum time to update
@@ -41,6 +47,9 @@ void draw() {
   // check update time
   if (millis() > timeToNextUpdate) {
     ok = triggerRandomPlayer();
+    if (!allowFade) {
+      currOpacity=255;
+    }
     // only update if an audio player is free
     if (ok) {
       // choose a random index to start updating from (1 to 4 shapes)
@@ -48,7 +57,7 @@ void draw() {
       // update everything from that index to the end
       while (current >= 0) {
         RandomShape x = shapes.get(current);
-        x.randomize(); // draw a new shape
+        x.randomize(currOpacity); // draw a new shape
         shapes.remove(current); // pop out of the list
         shapes.add(x); // place back on the end
         current--;
@@ -75,6 +84,7 @@ boolean triggerRandomPlayer() {
       if (!players[i].isPlaying()) {    
         players[i].rewind();
         players[i].play();
+        currOpacity = opacities[i];
         return true;
       }
       i++;
@@ -83,6 +93,7 @@ boolean triggerRandomPlayer() {
   } else {
     players[i].rewind();
     players[i].play();
+    currOpacity = opacities[i];
     return true;
   }
 }
