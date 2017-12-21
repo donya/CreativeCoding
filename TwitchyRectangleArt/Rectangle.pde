@@ -38,8 +38,10 @@ class Rectangle {
   
   void display() {
     if (w > 0 && h > 0) {
+      float a = max(0,min(lightness-100, 255));
+      float  b = max(0,min(blue-50,255));
       strokeWeight(width/250);
-      stroke(lightness-100, lightness-100, blue-50);
+      stroke(a,a,b);
       fill(lightness, lightness, blue, opacity);
       rect(x,y,w*factor,h*factor, curvature);
     }
